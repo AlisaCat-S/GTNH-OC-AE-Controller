@@ -26,7 +26,7 @@ local function require(path, method, header, body)
             body = json.encode(body)
         end
     end
-    
+     print("body = "..tostring(body))
     local reply = ""
     local handle = net.request(path, body, header, method)
     for chunk in handle do reply = reply .. chunk end
@@ -39,7 +39,7 @@ local function require(path, method, header, body)
     local mt = getmetatable(handle.close)
     mt.__call()
     --print("code = "..tostring(code))
-    --print("response = "..tostring(response))
+    print("response = "..tostring(response))
     --print("reply = "..tostring(reply))
     return reply, code, response, responseHeader
 end
