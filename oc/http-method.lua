@@ -26,19 +26,21 @@ local function require(path, method, header, body)
             body = json.encode(body)
         end
     end
-
+    
     local reply = ""
     local handle = net.request(path, body, header, method)
-
+    for chunk in handle do reply = reply .. chunk end
     local code, response, responseHeader = handle.response()
+
     if code == 200 then
-        for chunk in handle do reply = reply .. chunk end
         reply = json.decode(reply)
     end
 
     local mt = getmetatable(handle.close)
     mt.__call()
-
+    print("code = "..tostring(code))
+    print("response = "..tostring(response))
+    print("reply = "..tostring(reply))
     return reply, code, response, responseHeader
 end
 
