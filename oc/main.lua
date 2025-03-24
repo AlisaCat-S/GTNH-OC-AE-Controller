@@ -101,6 +101,7 @@ end
 
 function tasks.simpleCpusInfo(_)
     -- 获取所有cpu的简单信息
+    print("simpleCpusInfo")
     local list = meCpu.getCpuList(false)
     for _, cpu in pairs(list) do
         if cpu.id ~= nil and cpu.id ~= "" then
@@ -114,6 +115,7 @@ end
 
 function tasks.allCpusInfo(_)
     -- 获取所有cpu的详细信息
+    print("allCpusInfo")
     local list = meCpu.getCpuList(true)
     for _, cpu in pairs(list) do
         if cpu.id ~= nil and cpu.id ~= "" then
