@@ -38,9 +38,9 @@ local function require(path, method, header, body)
 
     local mt = getmetatable(handle.close)
     mt.__call()
-    print("code = "..tostring(code))
-    print("response = "..tostring(response))
-    print("reply = "..tostring(reply))
+    --print("code = "..tostring(code))
+    --print("response = "..tostring(response))
+    --print("reply = "..tostring(reply))
     return reply, code, response, responseHeader
 end
 
