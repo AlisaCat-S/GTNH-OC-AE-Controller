@@ -26,7 +26,7 @@ function tasks.refreshStorage(data)
     end
 
     http.put(config.path.items, {}, {result = result})
-    print("物品库存 Upload OK")
+    print("ItemStorage Upload OK")
 end
 
 function tasks.refreshFluidStorage(_)
@@ -44,7 +44,7 @@ function tasks.refreshFluidStorage(_)
     end
 
     http.put(config.path.fluids, {}, {result = result})
-    print("流体库存 Upload OK")
+    print("FluidStorage Upload OK")
 end
 
 function tasks.refreshEssentiaStorage(_)
@@ -62,7 +62,7 @@ function tasks.refreshEssentiaStorage(_)
     end
 
     http.put(config.path.essentia, {}, {result = result})
-    print("原质库存 Upload OK")
+    print("Essentia Upload OK")
 end
 
 function tasks.requestItem(data)
@@ -114,7 +114,7 @@ function tasks.simpleCpusInfo(_)
             end
         end
     end
-    print("所有cpu的简单信息 Upload OK")
+    print("simpleCpusInfo Upload OK")
 end
 
 function tasks.allCpusInfo(_)
@@ -128,7 +128,7 @@ function tasks.allCpusInfo(_)
             end
         end
     end
-    print("所有cpu的详细信息 Upload OK")
+    print("allCpusInfo Upload OK")
 end
 
 function tasks.cpuDetail(data)
