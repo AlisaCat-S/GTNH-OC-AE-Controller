@@ -29,7 +29,7 @@ local function require(path, method, header, body)
     --print("body = "..tostring(body))
     
     local reply = ""
-    print("->请求API = "..tostring(path))
+    print("->API = "..tostring(path))
     local handle = net.request(path, body, header, method)
     for chunk in handle do reply = reply .. chunk end
     local code, response, responseHeader = handle.response()
@@ -40,7 +40,7 @@ local function require(path, method, header, body)
 
     local mt = getmetatable(handle.close)
     mt.__call()
-    print("<-请求API完成: "..tostring(code).." Reply: "..tostring(reply))
+    print("<-API: "..tostring(code).." Reply: "..tostring(reply))
     --print("response = "..tostring(response))
     --print("reply = "..tostring(reply))
     return reply, code, response, responseHeader
