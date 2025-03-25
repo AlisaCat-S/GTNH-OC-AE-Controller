@@ -26,6 +26,7 @@ function tasks.refreshStorage(data)
     end
 
     http.put(config.path.items, {}, {result = result})
+    print("物品库存 Upload OK")
 end
 
 function tasks.refreshFluidStorage(_)
@@ -43,6 +44,7 @@ function tasks.refreshFluidStorage(_)
     end
 
     http.put(config.path.fluids, {}, {result = result})
+    print("流体库存 Upload OK")
 end
 
 function tasks.refreshEssentiaStorage(_)
@@ -60,6 +62,7 @@ function tasks.refreshEssentiaStorage(_)
     end
 
     http.put(config.path.essentia, {}, {result = result})
+    print("原质库存 Upload OK")
 end
 
 function tasks.requestItem(data)
@@ -101,7 +104,7 @@ end
 
 function tasks.simpleCpusInfo(_)
     -- 获取所有cpu的简单信息
-    print("simpleCpusInfo")
+    
     local list = meCpu.getCpuList(false)
     for _, cpu in pairs(list) do
         if cpu.id ~= nil and cpu.id ~= "" then
@@ -111,11 +114,11 @@ function tasks.simpleCpusInfo(_)
             end
         end
     end
+    print("所有cpu的简单信息 Upload OK")
 end
 
 function tasks.allCpusInfo(_)
     -- 获取所有cpu的详细信息
-    print("allCpusInfo")
     local list = meCpu.getCpuList(true)
     for _, cpu in pairs(list) do
         if cpu.id ~= nil and cpu.id ~= "" then
@@ -125,6 +128,7 @@ function tasks.allCpusInfo(_)
             end
         end
     end
+    print("所有cpu的详细信息 Upload OK")
 end
 
 function tasks.cpuDetail(data)
