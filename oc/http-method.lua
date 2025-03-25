@@ -26,20 +26,22 @@ local function require(path, method, header, body)
             body = json.encode(body)
         end
     end
-     print("body = "..tostring(body))
+    --print("body = "..tostring(body))
+    
     local reply = ""
+    print("请求API = "..tostring(path))
     local handle = net.request(path, body, header, method)
     for chunk in handle do reply = reply .. chunk end
     local code, response, responseHeader = handle.response()
-
+    
     if code == 200 then
         reply = json.decode(reply)
     end
 
     local mt = getmetatable(handle.close)
     mt.__call()
-    --print("code = "..tostring(code))
-    print("response = "..tostring(response))
+    print("请求API完成: "..tostring(code).." Reply: "..tostring(reply))
+    --print("response = "..tostring(response))
     --print("reply = "..tostring(reply))
     return reply, code, response, responseHeader
 end
