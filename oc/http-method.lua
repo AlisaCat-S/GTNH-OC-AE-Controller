@@ -33,14 +33,14 @@ local function require(path, method, header, body)
     local handle = net.request(path, body, header, method)
     for chunk in handle do reply = reply .. chunk end
     local code, response, responseHeader = handle.response()
-    
+    print("<-API: "..tostring(code).." Reply: "..tostring(reply))
     if code == 200 then
         reply = json.decode(reply)
     end
 
     local mt = getmetatable(handle.close)
     mt.__call()
-    print("<-API: "..tostring(code).." Reply: "..tostring(reply))
+    
     --print("response = "..tostring(response))
     --print("reply = "..tostring(reply))
     return reply, code, response, responseHeader
