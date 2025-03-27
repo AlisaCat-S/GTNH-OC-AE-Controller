@@ -168,16 +168,33 @@ function tasks.cpuMonitor(_)
                     if not cpu.busy then data[cpu.id] = true end
                 end
             end
-            if not busy then monitors.cpuMonitor = nil end
+            if not busy then
+                monitors.cpuMonitor = nil
+                print("No CPU is running, CPU monitor removed.")
+            end
         end
     }
-
+    print("CPU is running, CPU monitor added.")
 end
 
 http.init(config.baseUrl, tasks)
 
 while true do
     for _, monitor in pairs(monitors) do monitor.func(monitor.data) end
+
+    -- 判断是否有 CPU 运行，有则添加 CPU 监控器
+    local list = meCpu.getCpuList(true)
+    local hasBusyCpu = false
+    for _, cpu in pairs(list) do
+        if cpu.busy then
+            hasBusyCpu = true
+            break
+        end
+    end
+    if hasBusyCpu and not monitors.cpuMonitor then
+        tasks.cpuMonitor()
+    end
+
     local result, message = http.executeNextTask(config.path.task)
     print(result, message)
     os.sleep(config.sleep)
