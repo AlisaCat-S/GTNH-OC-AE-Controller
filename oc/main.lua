@@ -182,17 +182,20 @@ http.init(config.baseUrl, tasks)
 while true do
     for _, monitor in pairs(monitors) do monitor.func(monitor.data) end
 
-    -- 判断是否有 CPU 运行，有则添加 CPU 监控器
-    local list = meCpu.getCpuList(true)
-    local hasBusyCpu = false
-    for _, cpu in pairs(list) do
-        if cpu.busy then
-            hasBusyCpu = true
-            break
+    -- 判断是否有 CPU monitor，有则跳过判断是否有 CPU 运行
+    if not monitors.cpuMonitor then
+        -- 判断是否有 CPU 运行，有则添加 CPU 监控器
+        local list = meCpu.getCpuList(true)
+        local hasBusyCpu = false
+        for _, cpu in pairs(list) do
+            if cpu.busy then
+                hasBusyCpu = true
+                break
+            end
         end
-    end
-    if hasBusyCpu and not monitors.cpuMonitor then
-        tasks.cpuMonitor()
+        if hasBusyCpu and not monitors.cpuMonitor then
+            tasks.cpuMonitor()
+        end
     end
 
     local result, message = http.executeNextTask(config.path.task)
