@@ -155,37 +155,43 @@ end
 
 function tasks.cpuMonitor(_)
     monitors.cpuMonitor = {
-        data = {},  -- 改为存储CPU最后已知状态
+        data = {},  -- 存储CPU最后状态记录
         func = function(monitorData)
             local cpus = meCpu.getCpuList(true)
             local busyExists = false
 
             for _, cpu in pairs(cpus) do
                 if cpu.id and cpu.id ~= "" then
-                    -- 获取当前CPU状态标识
+                    -- 获取当前状态标识
                     local currentStatus = cpu.busy and "busy" or "idle"
                     -- 获取上次记录的状态
                     local lastStatus = monitorData[cpu.id]
 
-                    -- 状态变化时立即更新
-                    if currentStatus ~= lastStatus then
-                        http.put(config.path.cpu .. "/" .. cpu.id, {}, cpu)
-                        monitorData[cpu.id] = currentStatus  -- 更新记录状态
-                    end
-
-                    -- 标记是否存在繁忙CPU
+                    -- BUSY状态强制更新
                     if cpu.busy then
+                        http.put(config.path.cpu .. "/" .. cpu.id, {}, cpu)
+                        monitorData[cpu.id] = currentStatus  -- 更新记录
                         busyExists = true
+                        -- 调试日志
+                        print(("CPU[%s] busy status updated: %s"):format(cpu.id, cpu.busy))
+                    
+                    -- IDLE状态仅在变化时更新
+                    elseif currentStatus ~= lastStatus then
+                        http.put(config.path.cpu .. "/" .. cpu.id, {}, cpu)
+                        monitorData[cpu.id] = currentStatus
+                        print(("CPU[%s] idle status updated"):format(cpu.id))
                     end
                 end
             end
+
+            -- 无繁忙CPU时移除监控器
             if not busyExists then
                 monitors.cpuMonitor = nil
-                print("No CPU is running, CPU monitor removed.")
+                print("Monitor removed: All CPUs are idle")
             end
         end
     }
-    print("CPU is running, CPU monitor added.")
+    print("CPU monitor activated: real-time tracking started")
 end
 
 http.init(config.baseUrl, tasks)
