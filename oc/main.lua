@@ -154,18 +154,29 @@ function tasks.monitors(_)
 end
 
 function tasks.cpuMonitor(_)
-    -- 添加cpu监控器，直到无cpu运行时移除
     monitors.cpuMonitor = {
-        data = {},
-        func = function(data)
-            local list = meCpu.getCpuList(true)
-            local busy = false
-            for _, cpu in pairs(list) do
-                local flag = cpu.busy or data[cpu.id] == nil
-                if cpu.id ~= nil and cpu.id ~= "" and flag then
-                    http.put(config.path.cpu .. "/" .. cpu.id, {}, cpu)
-                    busy = true
-                    if not cpu.busy then data[cpu.id] = true end
+        data = {},  -- 改为存储CPU最后已知状态
+        func = function(monitorData)
+            local cpus = meCpu.getCpuList(true)
+            local busyExists = false
+
+            for _, cpu in pairs(cpus) do
+                if cpu.id and cpu.id ~= "" then
+                    -- 获取当前CPU状态标识
+                    local currentStatus = cpu.busy and "busy" or "idle"
+                    -- 获取上次记录的状态
+                    local lastStatus = monitorData[cpu.id]
+
+                    -- 状态变化时立即更新
+                    if currentStatus ~= lastStatus then
+                        http.put(config.path.cpu .. "/" .. cpu.id, {}, cpu)
+                        monitorData[cpu.id] = currentStatus  -- 更新记录状态
+                    end
+
+                    -- 标记是否存在繁忙CPU
+                    if cpu.busy then
+                        busyExists = true
+                    end
                 end
             end
             if not busy then
