@@ -179,7 +179,7 @@ function tasks.cpuMonitor(_)
                     end
                 end
             end
-            if not busy then
+            if not busyExists then
                 monitors.cpuMonitor = nil
                 print("No CPU is running, CPU monitor removed.")
             end
